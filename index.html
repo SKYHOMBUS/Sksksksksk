@@ -1,11 +1,83 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Teste Pages</title>
+<meta charset="UTF-8">
+<title>Frutas favoritas 🍎</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f2f2f2;
+  padding: 30px;
+}
+.box {
+  background: white;
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px;
+}
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+ul {
+  margin-top: 10px;
+}
+</style>
 </head>
+
 <body>
-  <h1>Funcionou 🚀</h1>
-  <p>GitHub Pages ativo.</p>
+
+<div class="box">
+  <h2>🍉 Fruta preferida</h2>
+
+  <input id="fruta" placeholder="Digite a fruta">
+  <button onclick="salvar()">Salvar</button>
+  <button onclick="baixar()">Baixar dados</button>
+
+  <h3>Frutas salvas:</h3>
+  <ul id="lista"></ul>
+</div>
+
+<script>
+let frutas = JSON.parse(localStorage.getItem("frutas")) || [];
+
+function salvar() {
+  const fruta = document.getElementById("fruta").value;
+  if (!fruta) return;
+
+  frutas.push(fruta);
+  localStorage.setItem("frutas", JSON.stringify(frutas));
+  document.getElementById("fruta").value = "";
+  mostrar();
+}
+
+function mostrar() {
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
+  frutas.forEach(f => {
+    const li = document.createElement("li");
+    li.textContent = f;
+    lista.appendChild(li);
+  });
+}
+
+function baixar() {
+  const blob = new Blob(
+    [JSON.stringify(frutas, null, 2)],
+    { type: "application/json" }
+  );
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "frutas.json";
+  link.click();
+}
+
+mostrar();
+</script>
+
 </body>
 </html>
